@@ -1,3 +1,3 @@
 package amobav2;
 
-public record Move(int row, int col) {}
+public record move(int row, int col) {}

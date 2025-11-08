@@ -1,9 +1,9 @@
 package amobav2;
 
-public abstract class Player {
+public abstract class jatekos {
     private final char symbol;
 
-    public Player(char symbol) {
+    public jatekos(char symbol) {
         this.symbol = symbol;
     }
 
@@ -11,5 +11,5 @@ public abstract class Player {
         return symbol;
     }
 
-    public abstract Move getMove(Board board);
+    public abstract move getMove(tabla board);
 }

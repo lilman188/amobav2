@@ -3,12 +3,12 @@ package amobav2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board {
+public class tabla {
     private final char[][] grid;
     private final int rows;
     private final int cols;
 
-    public Board(int rows, int cols) {
+    public tabla(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.grid = new char[rows][cols];
@@ -85,11 +85,11 @@ public class Board {
         return false;
     }
 
-    public List<Move> getAvailableMoves() {
-        List<Move> moves = new ArrayList<>();
+    public List<move> getAvailableMoves() {
+        List<move> moves = new ArrayList<>();
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
-                if (isEmpty(i, j)) moves.add(new Move(i, j));
+                if (isEmpty(i, j)) moves.add(new move(i, j));
         return moves;
     }
 

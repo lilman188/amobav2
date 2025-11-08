@@ -1,15 +1,15 @@
 package amobav2;
 
-public class Game {
-    private final Board board;
-    private final Player human;
-    private final Player computer;
-    private Player currentPlayer;
+public class jatek {
+    private final tabla board;
+    private final jatekos human;
+    private final jatekos computer;
+    private jatekos currentPlayer;
 
-    public Game(int rows, int cols) {
-        this.board = new Board(rows, cols);
-        this.human = new HumanPlayer('X');
-        this.computer = new ComputerPlayer('O');
+    public jatek(int rows, int cols) {
+        this.board = new tabla(rows, cols);
+        this.human = new ember('X');
+        this.computer = new gep('O');
         this.currentPlayer = human;
     }
 
@@ -26,7 +26,7 @@ public class Game {
         boolean gameOver = false;
 
         while (!gameOver) {
-            Move move = currentPlayer.getMove(board);
+            move move = currentPlayer.getMove(board);
             if (move == null) {
                 System.out.println("Nincs több lehetséges lépés!");
                 break;

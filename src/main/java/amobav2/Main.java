@@ -2,7 +2,7 @@ package amobav2;
 
 public class Main {
     public static void main(String[] args) {
-        Game game = new Game(10, 10); // 10x10 tábla
+        jatek game = new jatek(10, 10); // 10x10 tábla
         game.start();
     }
 }
