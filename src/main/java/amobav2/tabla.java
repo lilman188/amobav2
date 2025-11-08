@@ -1,4 +1,4 @@
-package hu.egyetem.amobav2;
+package amobav2;
 
 import java.util.ArrayList;
 import java.util.List;

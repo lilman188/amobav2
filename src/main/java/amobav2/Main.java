@@ -1,4 +1,4 @@
-package hu.egyetem.amobav2;
+package amobav2;
 
 public class Main {
     public static void main(String[] args) {

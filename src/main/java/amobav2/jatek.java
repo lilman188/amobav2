@@ -1,4 +1,4 @@
-package hu.egyetem.amobav2;
+package amobav2;
 
 public class Game {
     private final Board board;
