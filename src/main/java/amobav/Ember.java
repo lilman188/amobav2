@@ -3,11 +3,13 @@ package amobav;
 import java.util.Scanner;
 
 /**
- * Emberi játékos, aki a konzolról adja meg a lépéseit.
+ * Emberi játékost reprezentáló osztály.
+ * Kéri a felhasználótól a következő lépést a táblán.
  */
-public class Ember extends Jatekos {
-
-    /** A felhasználói bemenet olvasásához. */
+public final class Ember extends Jatekos {
+    /**
+     * Létrehoz egy Scanner objektumot.
+     */
     private final Scanner scanner = new Scanner(System.in);
 
     /**
@@ -19,41 +21,33 @@ public class Ember extends Jatekos {
         super(playerSymbol);
     }
 
+    /**
+     * Kéri az emberi játékostól a következő lépést.
+     *
+     * @param board a játéktábla, amin a lépést végrehajtjuk
+     * @return a kiválasztott lépés Move formátumban
+     */
     @Override
     public Move getMove(final Tabla board) {
+        int row;
+        int col;
+
         while (true) {
-            System.out.print("Lépj egyet (pl. A5): ");
-            String input = scanner.nextLine().trim().toUpperCase();
+            System.out.print(
+                    "Adja meg a sor számát (1-" + board.getRows() + "): ");
+            row = scanner.nextInt() - 1;
 
-            if (input.length() < 2) {
-                System.out.println("Hibás formátum!");
-                continue;
+            System.out.print("Adja meg az oszlop betűjét (A-" + (char)
+                    ('A' + board.getCols() - 1) + "): ");
+            col = Character.toUpperCase(scanner.next().charAt(0)) - 'A';
+
+            if (board.isValid(row, col) && board.isEmpty(row, col)) {
+                break;
+            } else {
+                System.out.println("Érvénytelen lépés. Próbálja újra!");
             }
-
-            char colChar = input.charAt(0);
-            int row;
-
-            try {
-                row = Integer.parseInt(input.substring(1)) - 1;
-            } catch (NumberFormatException e) {
-                System.out.println("Hibás formátum!");
-                continue;
-            }
-
-            int col = colChar - 'A';
-
-            if (row < 0 || row >= board.getRows()
-                    || col < 0 || col >= board.getCols()) {
-                System.out.println("A megadott mező nem létezik!");
-                continue;
-            }
-
-            if (!board.isEmpty(row, col)) {
-                System.out.println("Ez a mező foglalt!");
-                continue;
-            }
-
-            return new Move(row, col);
         }
+
+        return new Move(row, col);
     }
 }

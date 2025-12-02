@@ -6,7 +6,7 @@ package amobav;
  */
 public abstract class Jatekos {
 
-    /** A játékos szimbóluma */
+    /** A játékos szimbóluma. */
     private final char symbol;
 
     /**
@@ -33,5 +33,5 @@ public abstract class Jatekos {
      * @param board a játék tábla
      * @return a lépés
      */
-    public abstract Move getMove(final Tabla board);
+    public abstract Move getMove(Tabla board);
 }
