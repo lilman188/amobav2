@@ -1,94 +1,70 @@
 package amobav;
 
 /**
- * A {@code Jatek} osztály kezeli a játék fő folyamatát:
- * - a tábla létrehozása,
- * - a játékosok váltása,
- * - a lépések feldolgozása,
- * - a győzelem ellenőrzése.
+ * A Jatek osztály az amőba játék fő logikáját valósítja meg.
+ * Inicializálja a táblát, kezeli a játékosok lépéseit
+ * és vezérli a játék menetét.
  */
-public class Jatek {
+public final class Jatek {
+
+    /** A tábla sorainak száma. */
+    private final int rows;
+
+    /** A tábla oszlopainak száma. */
+    private final int cols;
+
+    /** A játékot reprezentáló tábla. */
+    private final Tabla tabla;
+
+    /** Az emberi játékos. */
+    private final Jatekos ember;
+
+    /** A gépi játékos. */
+    private final Jatekos gep;
 
     /**
-     * A játék táblája.
-     */
-    private final Tabla board;
-
-    /**
-     * Az emberi játékos.
-     */
-    private final Jatekos human;
-
-    /**
-     * A gépi játékos.
-     */
-    private final Jatekos computer;
-
-    /**
-     * A soron következő játékos.
-     */
-    private Jatekos currentPlayer;
-
-    /**
-     * Létrehoz egy új játékot a megadott mérettel.
+     * Létrehoz egy új játék példányt a megadott méretekkel és játékosokkal.
      *
-     * @param rows a tábla sorainak száma
-     * @param cols a tábla oszlopainak száma
+     * @param sorok a tábla sorainak száma
+     * @param oszlopok a tábla oszlopainak száma
+     * @param emberSzimb az emberi játékos szimbóluma
+     * @param gepSzimb a gépi játékos szimbóluma
      */
-    public Jatek(int rows, int cols) {
-        this.board = new Tabla(rows, cols);
-        this.human = new Ember('X');
-        this.computer = new Gep('O');
-        this.currentPlayer = human;
+    public Jatek(final int sorok, final int oszlopok,
+                 final char emberSzimb, final char gepSzimb) {
+        this.rows = sorok;
+        this.cols = oszlopok;
+        this.tabla = new Tabla(this.rows, this.cols);
+        this.ember = new Ember(emberSzimb);
+        this.gep = new Gep(gepSzimb);
     }
 
     /**
-     * Elindítja a játékot.
-     * Az ember automatikusan a középpontba helyezi az első lépést,
-     * majd a játékosok felváltva következnek.
+     * Elindítja a játékot, felváltva kéri a lépéseket a játékosoktól
+     * és ellenőrzi a nyerési feltételeket.
      */
     public void start() {
-        System.out.println("Amőba játék indul! (X = ember, O = gép)");
+        boolean emberKovetkezik = true;
+        tabla.print();
 
-        board.initialize();
+        while (true) {
+            Jatekos aktualis = emberKovetkezik ? ember : gep;
+            Move move = aktualis.getMove(tabla);
+            tabla.placeMark(move.row(), move.col(), aktualis.getSymbol());
+            tabla.print();
 
-        // Az ember kezd a tábla közepén.
-        int midRow = board.getRows() / 2;
-        int midCol = board.getCols() / 2;
-
-        board.placeMark(midRow, midCol, human.getSymbol());
-        board.print();
-
-        boolean gameOver = false;
-
-        while (!gameOver) {
-            Move move = currentPlayer.getMove(board);
-
-            if (move == null) {
-                System.out.println("Nincs több lehetséges lépés!");
+            if (tabla.checkWin(aktualis.getSymbol())) {
+                System.out.println((emberKovetkezik ? "Ember" : "Gép")
+                        + " nyert!");
                 break;
             }
 
-            board.placeMark(move.row(), move.col(), currentPlayer.getSymbol());
-            board.print();
-
-            if (board.checkWin(currentPlayer.getSymbol())) {
-                System.out.println("Győzött: " + currentPlayer.getSymbol());
-                gameOver = true;
-            } else {
-                switchPlayer();
+            if (tabla.getAvailableMoves().isEmpty()) {
+                System.out.println("Döntetlen!");
+                break;
             }
-        }
-    }
 
-    /**
-     * A soron következő játékos átváltása.
-     */
-    private void switchPlayer() {
-        if (currentPlayer == human) {
-            currentPlayer = computer;
-        } else {
-            currentPlayer = human;
+            emberKovetkezik = !emberKovetkezik;
         }
     }
 }

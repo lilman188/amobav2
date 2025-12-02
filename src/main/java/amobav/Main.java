@@ -1,24 +1,19 @@
 package amobav;
 
 /**
- * A program belépési pontja.
+ * A játék indításáért felelős osztály.
  */
-public final class Main {
+public class Main {
 
-    /**
-     * Privát konstruktor, hogy ne lehessen példányosítani.
-     */
-    private Main() {
-        throw new UnsupportedOperationException("Utility class");
-    }
+    public static void main(final String[] args) {
+        final int rows = 10;
+        final int cols = 10;
 
-    /**
-     * A program main metódusa. Létrehoz és elindít egy új játékot.
-     *
-     * @param args a parancssori argumentumok (nem használt)
-     */
-    public static void main(String[] args) {
-        Jatek game = new Jatek(10, 10); // 10×10 tábla
+        // Emberi és gépi játékos szimbólumok
+        final char emberSymbol = 'X';
+        final char gepSymbol = 'O';
+
+        Jatek game = new Jatek(rows, cols, emberSymbol, gepSymbol);
         game.start();
     }
 }

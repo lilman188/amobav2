@@ -1,152 +1,117 @@
 package amobav;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 /**
- * A {@code Gep} osztály egy egyszerű MI-t valósít meg,
- * amely megpróbálja megakadályozni, hogy az ember
- * 5 darab 'X' jelet egymás mellé tudjon rakni.
- * Először védekezik, majd ha nincs veszély, véletlenszerűen lép.
+ * Egyszerű gépi játékos.
+ * Védekező logikát alkalmaz: blokkolja az emberi játékos közelgő sorozatát,
+ * különben véletlenszerűen lép.
  */
 public class Gep extends Jatekos {
+    /** A sorozat hossza, amely szükséges a győzelemhez. */
+    private static final int WIN_LENGTH = 5;
 
-    /**
-     * A gépi játékos véletlenszerű lépéséhez használt generátor.
-     */
+    /** Küszöbérték a blokkolási logika számításához. */
+    private static final int BLOCK_THRESHOLD = 3;
+
+    /** Véletlenszám-generátor a gép lépéseinek
+     * véletlenszerű kiválasztásához. */
     private final Random random = new Random();
 
     /**
-     * A blokkoláshoz vizsgált maximális sorhossz.
-     */
-    private static final int MAX_CHAIN = 5;
-
-    /**
-     * Létrehoz egy gépi játékost.
+     * Létrehoz egy új gépi játékost a megadott szimbólummal.
      *
-     * @param symbol a gép szimbóluma (például 'O')
+     * @param playerSymbol a játékos szimbóluma
      */
-    public Gep(char symbol) {
-        super(symbol);
+    public Gep(final char playerSymbol) {
+        super(playerSymbol);
     }
 
     /**
-     * Meghatározza a gép következő lépését.
-     * Először blokkolja az emberi játékos erős sorait, majd ha nincs veszély,
-     * véletlenszerű pozíciót választ.
+     * Visszaadja a gép lépését.
+     * Először megpróbálja blokkolni az ellenfél sorozatát,
+     * különben véletlenszerű lépést választ.
      *
      * @param board a játék tábla
-     * @return a gép által kiválasztott lépés
+     * @return a kiválasztott lépés
      */
     @Override
-    public Move getMove(Tabla board) {
-        Move blockMove = findBlockingMove(board, 'X');
-        if (blockMove != null) {
-            System.out.println("Gép blokkol: " + formatMove(blockMove));
-            return blockMove;
+    public Move getMove(final Tabla board) {
+        Move block = findBlockingMove(board, 'X');
+        if (block != null) {
+            System.out.println("Gép blokkol: " + formatMove(block));
+            return block;
         }
 
         List<Move> possibleMoves = board.getAvailableMoves();
-        Move randomMove = possibleMoves.get(random.nextInt(possibleMoves.size()));
-
-        System.out.println("Gép véletlen lépése: " + formatMove(randomMove));
-        return randomMove;
+        Move move = possibleMoves.get(random.nextInt(possibleMoves.size()));
+        System.out.println("Gép véletlen lépése: " + formatMove(move));
+        return move;
     }
 
     /**
-     * Megkeresi, hogy az ellenfél közel áll-e 5 elemű sorhoz.
-     * Ha talál 3 vagy 4 egymás melletti jelet, melynek két vége közül valamelyik üres,
-     * akkor visszaadja a blokkoló mezőt.
+     * Megkeresi a blokk lépést, ha az ellenfél közelít a győzelemhez.
      *
-     * @param board a tábla
-     * @param enemySymbol az ember szimbóluma ('X')
-     * @return a blokkoló lépés vagy {@code null}, ha nincs veszély
+     * @param board a játék tábla
+     * @param enemySymbol az ellenfél szimbóluma
+     * @return a blokk lépés vagy null, ha nincs szükség blokkolásra
      */
-    private Move findBlockingMove(Tabla board, char enemySymbol) {
-
+    private Move findBlockingMove(final Tabla board, final char enemySymbol) {
         int rows = board.getRows();
         int cols = board.getCols();
+        int[][] directions = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
 
-        int[][] directions = {
-                {0, 1},   // vízszintes
-                {1, 0},   // függőleges
-                {1, 1},   // főátló
-                {1, -1}   // mellékátló
-        };
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-
-                if (board.getCell(row, col) != enemySymbol) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (board.getCell(r, c) != enemySymbol) {
                     continue;
                 }
 
-                for (int[] dir : directions) {
-                    int dr = dir[0];
-                    int dc = dir[1];
-
+                for (int[] d : directions) {
+                    int dr = d[0];
+                    int dc = d[1];
                     int count = 1;
-                    int checkRow;
-                    int checkCol;
 
-                    List<Move> chain = new ArrayList<>();
-                    chain.add(new Move(row, col));
-
-                    // Tovább vizsgáljuk a sort
-                    for (int k = 1; k < MAX_CHAIN; k++) {
-                        checkRow = row + dr * k;
-                        checkCol = col + dc * k;
-
-                        if (!board.isValid(checkRow, checkCol)) {
+                    for (int k = 1; k < WIN_LENGTH; k++) {
+                        int rr = r + dr * k;
+                        int cc = c + dc * k;
+                        if (!board.isValid(rr, cc)) {
                             break;
                         }
-
-                        if (board.getCell(checkRow, checkCol) == enemySymbol) {
+                        if (board.getCell(rr, cc) == enemySymbol) {
                             count++;
-                            chain.add(new Move(checkRow, checkCol));
                         } else {
                             break;
                         }
                     }
 
-                    // Ha kialakult minimum 3 elemű veszélyes lánc
-                    if (count >= 3) {
-
-                        // Sor eleje
-                        int blockRowStart = row - dr;
-                        int blockColStart = col - dc;
-
-                        if (board.isValid(blockRowStart, blockColStart)
-                                && board.isEmpty(blockRowStart, blockColStart)) {
-                            return new Move(blockRowStart, blockColStart);
+                    if (count >= BLOCK_THRESHOLD) {
+                        int br = r - dr;
+                        int bc = c - dc;
+                        if (board.isValid(br, bc) && board.isEmpty(br, bc)) {
+                            return new Move(br, bc);
                         }
 
-                        // Sor vége
-                        int blockRowEnd = row + dr * count;
-                        int blockColEnd = col + dc * count;
-
-                        if (board.isValid(blockRowEnd, blockColEnd)
-                                && board.isEmpty(blockRowEnd, blockColEnd)) {
-                            return new Move(blockRowEnd, blockColEnd);
+                        br = r + dr * count;
+                        bc = c + dc * count;
+                        if (board.isValid(br, bc) && board.isEmpty(br, bc)) {
+                            return new Move(br, bc);
                         }
                     }
                 }
             }
         }
-
         return null;
     }
 
     /**
-     * Formázza a lépést ember által olvasható alakra (pl. A5).
+     * Formázza a lépést emberi olvasható formátumba (pl. "A1").
      *
      * @param move a lépés
-     * @return az olvasható formátum
+     * @return a formázott lépés sztring
      */
-    private String formatMove(Move move) {
-        char column = (char) ('A' + move.col());
-        int row = move.row() + 1;
-        return String.valueOf(column) + row;
+    private String formatMove(final Move move) {
+        return "" + (char) ('A' + move.col()) + (move.row() + 1);
     }
 }

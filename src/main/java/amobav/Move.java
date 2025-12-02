@@ -1,10 +1,10 @@
 package amobav;
 
 /**
- * Egy lépést reprezentál a táblán.
- * <p>
- * A lépés egy sor–oszlop párt tartalmaz, ahová a játékos a saját jelét szeretné elhelyezni.
+ * Egy lépést reprezentál a játékban.
+ * Egy lépés sor és oszlop koordinátát tartalmaz.
+ *
+ * @param row a lépés sor indexe (0-tól)
+ * @param col a lépés oszlop indexe (0-tól)
  */
-public record Move(int row, int col) {
-
-}
+public record Move(int row, int col) { }

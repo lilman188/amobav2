@@ -1,28 +1,25 @@
 package amobav;
 
 /**
- * Absztrakt alaposztály, amely egy általános játékost reprezentál.
- * Minden játékos rendelkezik egy saját szimbólummal, és képes lépést
- * választani.
+ * Absztrakt osztály, amely egy játékost reprezentál.
+ * Minden játékos rendelkezik szimbólummal és képes lépést adni.
  */
 public abstract class Jatekos {
 
-    /**
-     * A játékos által használt szimbólum (X vagy O).
-     */
+    /** A játékos szimbóluma */
     private final char symbol;
 
     /**
      * Létrehoz egy új játékost a megadott szimbólummal.
      *
-     * @param symbol a játékos szimbóluma ('X' vagy 'O')
+     * @param playerSymbol a játékos szimbóluma
      */
-    public Jatekos(char symbol) {
-        this.symbol = symbol;
+    public Jatekos(final char playerSymbol) {
+        this.symbol = playerSymbol;
     }
 
     /**
-     * Visszaadja a játékos által használt szimbólumot.
+     * Visszaadja a játékos szimbólumát.
      *
      * @return a játékos szimbóluma
      */
@@ -31,10 +28,10 @@ public abstract class Jatekos {
     }
 
     /**
-     * Bekéri a játékostól a következő lépést.
+     * Visszaadja a játékos lépését a táblán.
      *
-     * @param board a játék aktuális táblája
-     * @return a játékos által választott lépés
+     * @param board a játék tábla
+     * @return a lépés
      */
-    public abstract Move getMove(Tabla board);
+    public abstract Move getMove(final Tabla board);
 }
