@@ -5,17 +5,18 @@ package amobav;
  */
 public final class Main {
 
-    /** Privát konstruktor, hogy a Main osztály ne példányosítható legyen. */
+    // Privát konstruktor, hogy a Main osztályt ne lehessen példányosítani
     private Main() {
-        // nem példányosítható
+        throw new UnsupportedOperationException(
+                "Utility class cannot be instantiated");
     }
 
     /**
      * Program belépési pontja.
      *
-     * @param args parancssori argumentumok
+     * @param args parancssori argumentumok (nem használjuk)
      */
-    public static void main(final String[] args) {
+    static void main(final String[] args) {
         final int rows = 10;
         final int cols = 10;
 
