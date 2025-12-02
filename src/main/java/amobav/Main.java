@@ -2,21 +2,18 @@ package amobav;
 
 /**
  * A játék indításáért felelős osztály.
- * Utility osztályként használva, nem példányosítható.
  */
 public final class Main {
 
-    /**
-     * Privát konstruktor, hogy ne lehessen példányosítani a utility osztályt.
-     */
+    /** Privát konstruktor, hogy a Main osztály ne példányosítható legyen. */
     private Main() {
-        // Üres
+        // nem példányosítható
     }
 
     /**
-     * A játékot indító metódus.
+     * Program belépési pontja.
      *
-     * @param args parancssori argumentumok (nem használtak)
+     * @param args parancssori argumentumok
      */
     public static void main(final String[] args) {
         final int rows = 10;

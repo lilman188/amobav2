@@ -3,13 +3,11 @@ package amobav;
 import java.util.Scanner;
 
 /**
- * Emberi játékost reprezentáló osztály.
- * Kéri a felhasználótól a következő lépést a táblán.
+ * Emberi játékos osztály.
+ * A felhasználótól kéri a lépéseket: sor szám és oszlop betű formátumban.
  */
-public final class Ember extends Jatekos {
-    /**
-     * Létrehoz egy Scanner objektumot.
-     */
+public final class Ember extends Jatekos { // final, mert nem lesz kiterjesztve
+    /** Beolvasáshoz használt Scanner objektum. */
     private final Scanner scanner = new Scanner(System.in);
 
     /**
@@ -22,29 +20,44 @@ public final class Ember extends Jatekos {
     }
 
     /**
-     * Kéri az emberi játékostól a következő lépést.
+     * Bekéri a felhasználótól a következő lépést.
      *
-     * @param board a játéktábla, amin a lépést végrehajtjuk
-     * @return a kiválasztott lépés Move formátumban
+     * @param board a játék aktuális állása
+     * @return a kiválasztott lépés (Move objektum)
      */
     @Override
     public Move getMove(final Tabla board) {
-        int row;
-        int col;
+        int row = -1;
+        int col = -1;
 
         while (true) {
-            System.out.print(
-                    "Adja meg a sor számát (1-" + board.getRows() + "): ");
-            row = scanner.nextInt() - 1;
+            try {
+                // Sor bekérése (1-től board.getRows()-ig)
+                System.out.print("Sor (1-" + board.getRows() + "): ");
+                row = scanner.nextInt() - 1; // index 0-tól
+                scanner.nextLine(); // puffer ürítése
 
-            System.out.print("Adja meg az oszlop betűjét (A-" + (char)
-                    ('A' + board.getCols() - 1) + "): ");
-            col = Character.toUpperCase(scanner.next().charAt(0)) - 'A';
+                // Oszlop bekérése (A-tól megfelelő betűig)
+                System.out.print("Oszlop (A-" + (char)
+                        ('A' + board.getCols() - 1) + "): ");
+                String input = scanner.nextLine().toUpperCase(); // nagybetűs
+                if (input.length() != 1 || input.charAt(0)
+                        < 'A' || input.charAt(0) >= 'A' + board.getCols()) {
+                    System.out.println("Érvénytelen oszlop!");
+                    continue;
+                }
+                col = input.charAt(0) - 'A'; // betűből szám
 
-            if (board.isValid(row, col) && board.isEmpty(row, col)) {
-                break;
-            } else {
-                System.out.println("Érvénytelen lépés. Próbálja újra!");
+                // Érvényesség ellenőrzése
+                if (!board.isValid(row, col) || !board.isEmpty(row, col)) {
+                    System.out.println("Érvénytelen lépés!");
+                    continue;
+                }
+
+                break; // helyes lépés
+            } catch (Exception e) {
+                System.out.println("Hibás input, próbáld újra!");
+                scanner.nextLine(); // puffer ürítése
             }
         }
 

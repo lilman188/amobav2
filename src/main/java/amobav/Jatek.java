@@ -1,19 +1,11 @@
 package amobav;
 
 /**
- * A Jatek osztály az amőba játék fő logikáját valósítja meg.
- * Inicializálja a táblát, kezeli a játékosok lépéseit
- * és vezérli a játék menetét.
+ * A játék fő logikáját kezelő osztály.
  */
-public final class Jatek {
+public class Jatek {
 
-    /** A tábla sorainak száma. */
-    private final int rows;
-
-    /** A tábla oszlopainak száma. */
-    private final int cols;
-
-    /** A játékot reprezentáló tábla. */
+    /** A játék táblája. */
     private final Tabla tabla;
 
     /** Az emberi játékos. */
@@ -23,48 +15,49 @@ public final class Jatek {
     private final Jatekos gep;
 
     /**
-     * Létrehoz egy új játék példányt a megadott méretekkel és játékosokkal.
+     * Létrehoz egy új játékot a megadott paraméterekkel.
      *
-     * @param sorok a tábla sorainak száma
-     * @param oszlopok a tábla oszlopainak száma
-     * @param emberSzimb az emberi játékos szimbóluma
-     * @param gepSzimb a gépi játékos szimbóluma
+     * @param rows tábla sorainak száma
+     * @param cols tábla oszlopainak száma
+     * @param emberSymbol emberi játékos szimbóluma
+     * @param gepSymbol gépi játékos szimbóluma
      */
-    public Jatek(final int sorok, final int oszlopok,
-                 final char emberSzimb, final char gepSzimb) {
-        this.rows = sorok;
-        this.cols = oszlopok;
-        this.tabla = new Tabla(this.rows, this.cols);
-        this.ember = new Ember(emberSzimb);
-        this.gep = new Gep(gepSzimb);
+    public Jatek(final int rows, final int cols, final char emberSymbol,
+                 final char gepSymbol) {
+        this.tabla = new Tabla(rows, cols);
+        this.ember = new Ember(emberSymbol);
+        this.gep = new Gep(gepSymbol);
     }
 
     /**
-     * Elindítja a játékot, felváltva kéri a lépéseket a játékosoktól
-     * és ellenőrzi a nyerési feltételeket.
+     * Elindítja a játékot.
      */
     public void start() {
-        boolean emberKovetkezik = true;
-        tabla.print();
+        Jatekos currentPlayer = ember;
 
         while (true) {
-            Jatekos aktualis = emberKovetkezik ? ember : gep;
-            Move move = aktualis.getMove(tabla);
-            tabla.placeMark(move.row(), move.col(), aktualis.getSymbol());
             tabla.print();
+            System.out.println("Játékos " + currentPlayer.getSymbol()
+                    + " következik:");
 
-            if (tabla.checkWin(aktualis.getSymbol())) {
-                System.out.println((emberKovetkezik ? "Ember" : "Gép")
-                        + " nyert!");
+            Move move = currentPlayer.getMove(tabla);
+            tabla.placeMark(move.row(), move.col(), currentPlayer.getSymbol());
+
+            if (tabla.checkWin(currentPlayer.getSymbol())) {
+                tabla.print();
+                System.out.println(
+                        "A játékos " + currentPlayer.getSymbol() + " nyert!");
                 break;
             }
 
             if (tabla.getAvailableMoves().isEmpty()) {
+                tabla.print();
                 System.out.println("Döntetlen!");
                 break;
             }
 
-            emberKovetkezik = !emberKovetkezik;
+            // váltás a másik játékosra
+            currentPlayer = (currentPlayer == ember) ? gep : ember;
         }
     }
 }
