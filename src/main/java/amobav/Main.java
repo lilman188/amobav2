@@ -21,8 +21,8 @@ public final class Main {
         final int cols = 5;
 
         // Emberi és gépi játékos szimbólumok
-        final char emberSymbol = 'X';
-        final char gepSymbol = 'O';
+        final char emberSymbol = '0';
+        final char gepSymbol = 'X';
 
         Jatek game = new Jatek(rows, cols, emberSymbol, gepSymbol);
         game.start();
