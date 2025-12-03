@@ -25,7 +25,7 @@ public final class Tabla {
     private final char[][] board;
 
     /** A nyeréshez szükséges egymás melletti jelek száma. */
-    private static final int WIN_LENGTH = 5;
+    private static final int WIN_LENGTH = 3;
 
     /**
      * Létrehoz egy új tábla példányt a megadott méretekkel.
@@ -144,6 +144,7 @@ public final class Tabla {
                 }
             }
         }
+
 
         // függőleges
         for (int r = 0; r <= rows - WIN_LENGTH; r++) {
