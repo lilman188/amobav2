@@ -17,8 +17,8 @@ public final class Main {
      * @param args parancssori argumentumok (nem használjuk)
      */
     static void main(final String[] args) {
-        final int rows = 10;
-        final int cols = 10;
+        final int rows = 5;
+        final int cols = 5;
 
         // Emberi és gépi játékos szimbólumok
         final char emberSymbol = 'X';
