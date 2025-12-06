@@ -29,6 +29,7 @@ public final class Tabla {
 
     /**
      * Létrehoz egy új tábla példányt a megadott méretekkel.
+     *
      * @param numRows sorok száma
      * @param numCols oszlopok száma
      */
@@ -41,6 +42,7 @@ public final class Tabla {
 
     /**
      * Ellenőrzi, hogy a pozíció a tábla határain belül van-e.
+     *
      * @param row sor index
      * @param col oszlop index
      * @return true, ha érvényes pozíció
@@ -51,6 +53,7 @@ public final class Tabla {
 
     /**
      * Visszaadja a tábla adott mezőjének értékét.
+     *
      * @param row sor index
      * @param col oszlop index
      * @return a mező tartalma ('X', 'O' vagy ' ')
@@ -61,6 +64,7 @@ public final class Tabla {
 
     /**
      * Ellenőrzi, hogy a megadott mező üres-e.
+     *
      * @param row sor index
      * @param col oszlop index
      * @return true, ha a mező üres
@@ -71,6 +75,7 @@ public final class Tabla {
 
     /**
      * Lerakja a játékos szimbólumát a megadott mezőre.
+     *
      * @param row sor index
      * @param col oszlop index
      * @param symbol a játékos szimbóluma
@@ -97,6 +102,7 @@ public final class Tabla {
 
     /**
      * Visszaadja a tábla összes szabad mezőjét.
+     *
      * @return lista a lehetséges lépésekből
      */
     public List<Move> getAvailableMoves() {
@@ -132,6 +138,7 @@ public final class Tabla {
 
     /**
      * Ellenőrzi, hogy a játékos nyert-e (5 azonos jel egymás mellett).
+     *
      * @param symbol a játékos szimbóluma
      * @return true, ha nyert
      */
@@ -179,6 +186,7 @@ public final class Tabla {
     /**
      * Segédfüggvény, amely ellenőrzi, hogy az adott kezdőponttól
      * adott irányban 5 azonos szimbólum van-e.
+     *
      * @param symbol a játékos szimbóluma
      * @param row kezdő sor
      * @param col kezdő oszlop
@@ -198,6 +206,7 @@ public final class Tabla {
 
     /**
      * Visszaadja a tábla sorainak számát.
+     *
      * @return sorok száma
      */
     public int getRows() {
@@ -206,6 +215,7 @@ public final class Tabla {
 
     /**
      * Visszaadja a tábla oszlopainak számát.
+     *
      * @return oszlopok száma
      */
     public int getCols() {

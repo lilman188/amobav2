@@ -27,6 +27,7 @@ public final class Ember extends Jatekos {
 
     /**
      * Visszaadja a játékos nevét.
+     *
      * @return a játékos neve
      */
     public String getName() {
@@ -46,7 +47,7 @@ public final class Ember extends Jatekos {
                 scanner.nextLine(); // puffer ürítése
 
                 // Oszlop bekérése (A-tól megfelelő betűig)
-                System.out.print("Add meg az oszlop betűjét (A-" + (char)('A' + board.getCols() - 1) + "): ");
+                System.out.print("Add meg az oszlop betűjét (A-" + (char) ('A' + board.getCols() - 1) + "): ");
                 String input = scanner.nextLine().toUpperCase();
 
                 if (input.length() != 1 || input.charAt(0) < 'A' || input.charAt(0) >= 'A' + board.getCols()) {

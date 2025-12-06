@@ -17,7 +17,7 @@ public final class Gep extends Jatekos {
     public Move getMove(final Tabla board) {
         List<Move> possibleMoves = board.getAvailableMoves();
         Move move = possibleMoves.get(random.nextInt(possibleMoves.size()));
-        System.out.println("Gép lépése: " + (char)('A' + move.col()) + (move.row() + 1));
+        System.out.println("Gép lépése: " + (char) ('A' + move.col()) + (move.row() + 1));
         return move;
     }
 }
