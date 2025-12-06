@@ -1,30 +1,40 @@
 package amobav;
 
+import java.util.Scanner;
+
 /**
  * A játék indításáért felelős osztály.
  */
 public final class Main {
 
-    // Privát konstruktor, hogy a Main osztályt ne lehessen példányosítani
     private Main() {
         throw new UnsupportedOperationException(
                 "Utility class cannot be instantiated");
     }
 
-    /**
-     * Program belépési pontja.
-     *
-     * @param args parancssori argumentumok (nem használjuk)
-     */
-    static void main(final String[] args) {
+    public static void main(final String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Humán játékos neve
+        System.out.print("Add meg a neved: ");
+        String playerName = scanner.nextLine().trim();
+
         final int rows = 5;
         final int cols = 5;
 
         // Emberi és gépi játékos szimbólumok
-        final char emberSymbol = '0';
-        final char gepSymbol = 'X';
+        final char emberSymbol = 'X';
+        final char gepSymbol = 'O';
 
-        Jatek game = new Jatek(rows, cols, emberSymbol, gepSymbol);
+        // Adatbázis inicializálása
+        DatabaseManager db = new DatabaseManager();
+
+        // Játékos létrehozása névvel
+        Jatek game = new Jatek(rows, cols, emberSymbol, gepSymbol, db, playerName);
         game.start();
+
+        // High score kiírása
+        db.printHighScores();
+        db.close();
     }
 }
