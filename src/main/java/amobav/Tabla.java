@@ -171,7 +171,7 @@ public final class Tabla {
             }
         }
 
-        // mellékátló
+        // melékátló
         for (int r = 0; r <= rows - WIN_LENGTH; r++) {
             for (int c = WIN_LENGTH - 1; c < cols; c++) {
                 if (checkLine(symbol, r, c, 1, -1)) {
