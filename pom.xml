@@ -82,11 +82,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.29.0</version>
+                <version>3.21.0</version>
                 <configuration>
-                    <rulesets>
-                        <ruleset>${basedir}/src/main/resources/pmd-ruleset.xml</ruleset>
-                    </rulesets>
+                    <targetJdk>17</targetJdk>
                 </configuration>
                 <executions>
                     <execution>

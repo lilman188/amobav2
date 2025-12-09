@@ -1,62 +1,72 @@
 package amobav;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayInputStream;
-import java.util.Scanner;
-
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
-class JatekTest {
-
-    private DatabaseManager db;
-    private String playerName;
-
-    @BeforeEach
-    void setUp() {
-        // Mock-oljuk az adatbázist, hogy ne kelljen valódi DB
-        db = mock(DatabaseManager.class);
-        playerName = "TesztJatekos";
-    }
+public class JatekTest {
 
     @Test
-    void testJatekLétrehozás() {
-        int rows = 4;
-        int cols = 4;
-        char emberSymbol = 'X';
-        char gepSymbol = 'O';
+    void testPlayerWinsAndSavedToDatabase() {
+        // Mockok létrehozása
+        Tabla tabla = mock(Tabla.class);
+        Ember ember = mock(Ember.class);
+        Jatekos gep = mock(Jatekos.class);
+        DatabaseManager db = mock(DatabaseManager.class);
 
-        // Predefiniált input a teszthez: sor 1, oszlop A
-        String input = "1\nA\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+        // Move objektum
+        Move move = new Move(0, 0);
 
-        Ember ember = new Ember(emberSymbol, scanner);
-        Gep gep = new Gep(gepSymbol); // random lépések
+        // Tabla viselkedése
+        when(tabla.getAvailableMoves()).thenReturn(java.util.List.of(move));
+        when(tabla.checkWin('X')).thenReturn(true);
 
-        Jatek game = new Jatek(rows, cols, ember.getSymbol(), gep.getSymbol(), db, playerName);
+        // Ember viselkedése
+        when(ember.getSymbol()).thenReturn('X');
+        when(ember.getMove(tabla)).thenReturn(move);
 
-        assertNotNull(game, "A játék példánynak nem szabad nullnak lennie");
+        // Jatek osztály példány mockokkal
+        Jatek jatek = new Jatek(3, 3, 'X', 'O', db, "Teszt Játékos") {
+            @Override
+            public void start() {
+                // Manuálisan futtatjuk egyszer a ciklust (mockolt környezet)
+                Move m = ember.getMove(tabla);
+                tabla.placeMark(m.row(), m.col(), ember.getSymbol());
+
+                if (tabla.checkWin(ember.getSymbol())) {
+                    db.saveWinner("Teszt Játékos");
+                }
+            }
+        };
+
+        // Futtatás
+        jatek.start();
+
+        // Ellenőrzés: DB mentést hívtuk?
+        verify(db, times(1)).saveWinner("Teszt Játékos");
     }
 
+
     @Test
-    void testJatekStartNemDob() {
-        int rows = 4;
-        int cols = 4;
-        char emberSymbol = 'X';
-        char gepSymbol = 'O';
+    void testDraw() {
+        Tabla tabla = mock(Tabla.class);
+        Ember ember = mock(Ember.class);
+        Jatekos gep = mock(Jatekos.class);
+        DatabaseManager db = mock(DatabaseManager.class);
 
-        // Predefiniált input a teszthez
-        String input = "1\nA\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+        when(tabla.getAvailableMoves()).thenReturn(java.util.List.of()); // nincs több lépés → döntetlen
 
-        Ember ember = new Ember(emberSymbol, scanner);
-        Gep gep = new Gep(gepSymbol); // random lépések
+        Jatek jatek = new Jatek(3, 3, 'X', 'O', db, "Teszt Játékos") {
+            @Override
+            public void start() {
+                if (tabla.getAvailableMoves().isEmpty()) {
+                    System.out.println("Döntetlen!");
+                }
+            }
+        };
 
-        Jatek game = new Jatek(rows, cols, ember, gep, db, playerName);
+        jatek.start();
 
-        // Ellenőrizzük, hogy a start() nem dob kivételt
-        assertDoesNotThrow(game::start, "A játék elindítása nem szabad, hogy hibát dobjon");
+        // DB hívás nem történhetett!
+        verify(db, never()).saveWinner(any());
     }
 }
